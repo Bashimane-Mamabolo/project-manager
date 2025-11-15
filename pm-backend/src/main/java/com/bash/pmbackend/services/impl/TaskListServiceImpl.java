@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 public class TaskListServiceImpl implements TaskListService {
 
@@ -41,4 +44,14 @@ public class TaskListServiceImpl implements TaskListService {
                 now
         ));
     }
+
+    @Override
+    public Optional<TaskList> getTaskListById(UUID id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Task list id is required");
+        }
+        return taskListRepository.findById(id);
+    }
+
+
 }

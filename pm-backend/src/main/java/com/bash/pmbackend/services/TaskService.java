@@ -9,5 +9,5 @@ public interface TaskService {
 
     // Get the list of tasks that belong to a specific TaskList
     List<Task> listAllTasks(UUID taskListId);
-
+    Task createTask(UUID taskListId, Task task); // Assign the Task to the tasklist of the taskListId
 }

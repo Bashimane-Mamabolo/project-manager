@@ -7,6 +7,7 @@ import com.bash.pmbackend.services.TaskService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -37,6 +38,15 @@ public class TaskController {
             @RequestBody TaskDto taskDto) {
         return taskMapper.toDTO(taskService.createTask(taskListId,
                 taskMapper.fromDTO(taskDto)));
+    }
+
+    @GetMapping(path = "/{task_id}")
+    public Optional<TaskDto> getTask(
+            @PathVariable("task_list_id") UUID taskListId,
+            @PathVariable("task_id") UUID taskId) {
+
+        return taskService.getTask(taskListId, taskId)
+                .map(taskMapper::toDTO);
     }
 
 }

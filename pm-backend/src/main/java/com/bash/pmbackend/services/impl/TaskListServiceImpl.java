@@ -3,6 +3,7 @@ package com.bash.pmbackend.services.impl;
 import com.bash.pmbackend.domain.entities.TaskList;
 import com.bash.pmbackend.repositories.TaskListRepository;
 import com.bash.pmbackend.services.TaskListService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -53,7 +54,7 @@ public class TaskListServiceImpl implements TaskListService {
         }
         return taskListRepository.findById(id);
     }
-
+    @Transactional
     @Override
     public TaskList updateTaskList(UUID id, TaskList taskList) {
         // Validations
@@ -77,7 +78,7 @@ public class TaskListServiceImpl implements TaskListService {
 
     @Override
     public void deleteTaskListById(UUID taskListId) {
-        taskListRepository.deleteById(taskListId);
+        taskListRepository.deleteById(taskListId); //Already has @Transaction
     }
 
 

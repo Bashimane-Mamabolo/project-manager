@@ -7,6 +7,7 @@ import com.bash.pmbackend.domain.entities.TaskStatus;
 import com.bash.pmbackend.repositories.TaskListRepository;
 import com.bash.pmbackend.repositories.TaskRepository;
 import com.bash.pmbackend.services.TaskService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -31,7 +32,7 @@ public class TaskServiceImpl implements TaskService {
         // returns list of task that match the taskListId
         return taskRepository.findByTaskListId(taskListId);
     }
-
+    @Transactional
     @Override
     public Task createTask(UUID taskListId, Task task) {
         if (task.getId() != null) {
@@ -67,7 +68,7 @@ public class TaskServiceImpl implements TaskService {
     public Optional<Task> getTask(UUID taskListId, UUID taskId) {
         return taskRepository.findByTaskListIdAndId(taskListId, taskId);
     }
-
+    @Transactional
     @Override
     public Task updateTask(UUID taskListId, UUID taskId, Task task) {
         if (taskId == null) {
@@ -87,6 +88,7 @@ public class TaskServiceImpl implements TaskService {
         }
         Task existingTask = taskRepository.findByTaskListIdAndId(taskListId, taskId)
                 .orElseThrow(() -> new IllegalArgumentException("Task list ID not found"));
+
         existingTask.setTitle(task.getTitle());
         existingTask.setDescription(task.getDescription());
         existingTask.setPriority(task.getPriority());
@@ -95,5 +97,11 @@ public class TaskServiceImpl implements TaskService {
         existingTask.setUpdatedDate(LocalDateTime.now());
 
         return taskRepository.save(existingTask);
+    }
+
+    @Transactional
+    @Override
+    public void deleteTask(UUID taskListId, UUID taskId) {
+        taskRepository.deleteByTaskListIdAndId(taskListId, taskId);
     }
 }
